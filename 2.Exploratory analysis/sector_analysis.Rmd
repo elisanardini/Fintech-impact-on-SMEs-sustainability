@@ -1,0 +1,418 @@
+---
+title: "PMEs Fintech&Sustainability in Triveneto Area"
+subtitle: "Sector Analysis"
+author: "Elisa Nardini"
+date: "2024-02-02"
+output: pdf_document
+---
+
+## Dataset and package reading
+
+```{r setup, include=FALSE}
+rm(list = ls())
+
+# Set Wd ------------------------------------------------------------------------
+setwd("~/Desktop/R/fintechsustainabilty")
+df <- read.csv("dataset_en.csv")
+
+# Packages ----------------------------------------------------------------------
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(dplyr)
+
+# Import Data -------------------------------------------------------------------
+dataset_survey_sector <- read.csv("dataset_en.csv")
+dataset_survey_sector <- dataset_survey_sector[, -c(1)]
+```
+
+Font settings
+
+```{r}
+
+# Packages ----------------------------------------------------------------------
+library(extrafont)
+
+# Import Font -------------------------------------------------------------------
+font_import(pattern = "Arial")
+loadfonts()
+
+# Set Font ----------------------------------------------------------------------
+par(family = "Arial") 
+theme_set(theme_grey(base_family = "Arial"))
+```
+
+
+## SECTOR STATS [X3]  -----------------------------------------------------------
+
+```{r}
+
+# Space remove ------------------------------------------------------------------
+dataset_survey_sector$X3 <- trimws(dataset_survey_sector$X3, "both")
+
+#Frequency Distribution ---------------------------------------------------------
+sector_frequency <- table(dataset_survey_sector[, 3])
+
+sector_frequency_df <- as.data.frame(sector_frequency)
+sector_frequency_df <- sector_frequency_df[order(sector_frequency_df$Freq), ]
+print(sector_frequency_df)
+
+# Saving ------------------------------------------------------------------------
+# sector_frequency_df <- as.data.frame(t(sector_frequency))
+# write.csv(sector_frequency_df, "sector_frequency_df.csv")
+```
+
+Sector Variable Bar Plot  -------------------------------------------------------
+
+```{r}
+
+# Bar plot  ---------------------------------------------------------------------
+BarPlot_Sectors <- ggplot(dataset_survey_sector, aes(x = X3, fill = X3)) +
+  geom_bar() +
+  labs(title = NULL, x = NULL, y = "Frequency", fill = NULL) +  
+  theme(axis.text.x = element_blank()) +  
+  scale_fill_viridis_d() 
+
+print(BarPlot_Sectors)
+
+
+ggsave(file.path("plot", "1.BarPlot_Sectors.pdf"), plot = BarPlot_Sectors)
+```
+
+Sector Variable Pie Chart  ------------------------------------------------------
+
+```{r}
+# Pie Chart  --------------------------------------------------------------------
+PieChart_Sector <- ggplot(dataset_survey_sector, aes(x = "", fill = X3)) +
+  geom_bar(width = 0.2, color = "white", position = "fill") +
+  coord_polar("y", start = 0) +
+  labs(title = NULL, 
+       fill = NULL) +
+  coord_polar(theta = "y") +
+  scale_fill_discrete(name = NULL) +
+  theme_void()
+print(PieChart_Sector)
+# ggsave("PieChart_Sector.pdf", plot = PieChart_Sector)
+```
+
+
+
+## FINTECH ADOPTION STATS [X15]  ------------------------------------------------
+
+
+```{r}
+# Frequency Distribution  -------------------------------------------------------
+FA_frequency <- table(dataset_survey_sector[, 15])
+print(FA_frequency)
+
+# Saving ------------------------------------------------------------------------
+# FA_frequency_df <- as.data.frame(t(FA_frequency))
+# write.csv(FA_frequency_df, "FA_frequency.csv")
+```
+
+Fintech Adoption Bar Plot  ------------------------------------------------------
+
+```{r}
+# Bar plot  ---------------------------------------------------------------------
+BarPlot_FA <- ggplot(dataset_survey_sector, aes(x = X15)) +
+  geom_bar(fill = "skyblue") +
+  labs(title = "Fintech Adoption", x = "Response", y = "Frequency") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+print(BarPlot_FA)
+# ggsave("BarPlot_FA.pdf", plot = BarPlot_FA)
+```
+
+
+
+
+
+## FINTECH ADOPTION STATS PER SECTOR [X3; X15]  ---------------------------------
+
+```{r}
+
+tabella_sector_FA <- table(dataset_survey_sector$X3, dataset_survey_sector$X15)
+print(tabella_sector_FA)
+
+# Saving ------------------------------------------------------------------------
+# tabella_sector_FA_df <- as.data.frame(t(tabella_sector_FA))
+# write.csv(tabella_sector_FA_df, "tabella_sector_FA.csv")
+```
+
+
+Fintech Adoption per sector Bar Plot  -------------------------------------------
+
+```{r}
+# Barplot
+Barplot_FA_per_Sector <- ggplot(dataset_survey_sector, aes(x = X3, y = X15, fill = X3)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d() +
+  labs(title = NULL, x = NULL, y = "Response", fill = "Legend") +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) 
+
+print(Barplot_FA_per_Sector)
+
+
+# ggsave("Barplot_FA_per_Sector.pdf", plot = Barplot_FA_per_Sector)
+```
+
+## FINTECH/SUSTAINABILITY PROJECTS STATS PER SECTOR  ---------------------------- 
+
+
+```{r}
+#Frequency Distribution ---------------------------------------------------------
+frequency_projects <- table(dataset_survey_sector[, 16])
+print(frequency_projects)
+
+# Saving ------------------------------------------------------------------------
+# frequency_projects_df <- as.data.frame(t(frequency_projects))
+# write.csv(frequency_projects_df, "frequency_projects.csv")
+```
+
+Bar Plot Projects  --------------------------------------------------------------
+
+```{r}
+df_X16_filtered <- dataset_survey_sector[dataset_survey_sector$X16 != 0, ] 
+
+# BarPlot
+BarPlot_projects <- ggplot(df_X16_filtered, aes(x = X16)) +
+  geom_bar(fill = "skyblue") +
+  labs(title = NULL, x = "Projects", y = "Frequency") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(BarPlot_projects)
+# ggsave("BarPlot_projects.pdf", plot = BarPlot_projects)
+```
+
+
+## FINTECH/SUSTAINABILITY PROJECTS STATS per Sector [X3; X16]  -----------------------------
+
+
+```{r}
+#Frequency Table
+table_sector_Projects <- table(dataset_survey_sector$X3, dataset_survey_sector$X16)
+print(table_sector_Projects)
+
+# Saving ------------------------------------------------------------------------
+# table_sector_Projects_df <- as.data.frame(t(table_sector_Projects))
+# write.csv(table_sector_Projects_df, "table_sector_Projects.csv")
+```
+
+
+
+## Applicability issues [x33] ---------------------------------------------------
+
+```{r}
+#Frequency Distribution ---------------------------------------------------------
+issues_frequency <- table(dataset_survey_sector[, 33])
+print(issues_frequency)
+
+# Saving ------------------------------------------------------------------------
+# issues_frequency_df <- as.data.frame(t(issues_frequency))
+# write.csv(issues_frequency_df, "issues_frequency.csv")
+```
+
+Applicability issues Variable Bar Plot  -----------------------------------------
+
+```{r}
+# Bar plot  ---------------------------------------------------------------------
+BarPlot_issues <- ggplot(dataset_survey_sector, aes(x = X33, fill = X33)) +
+  geom_bar() +
+  labs(title = "Problems", x = NULL, y = "Frequency") +  
+  theme(axis.text.x = element_blank()) +  
+  scale_fill_discrete(name = "Legend")
+
+print(BarPlot_issues)
+# ggsave("BarPlot_issues.pdf", plot = BarPlot_issues)
+```
+
+## SECTOR AND Applicability issues  ---------------------------------------------
+
+
+```{r}
+#Frequency Table
+table_sector_problems <- table(dataset_survey_sector$X3, dataset_survey_sector$X33)
+print(table_sector_problems)
+
+# Saving ------------------------------------------------------------------------
+# table_sector_problems_df <- as.data.frame(t(table_sector_problems))
+# write.csv(table_sector_problems_df, "table_sector_problems.csv")
+
+```
+
+
+
+## VERTICALS KNOWLEDGE [X34] ----------------------------------------------------
+
+```{r}
+
+# VERTICALS RATIO
+
+# Total "Si" (Yes) response in columns 9 - 12
+total_si <- rowSums(dataset_survey_sector[, 9:12] == "Si", na.rm = TRUE)
+
+# Normalize values from 0 to 1
+min_val <- min(total_si)
+max_val <- max(total_si)
+normalized_val <- (total_si - min_val) / (max_val - min_val)
+
+# Add new column for Horizontal Ratio
+dataset_survey_sector$X34 <- normalized_val
+```
+
+```{r}
+#Frequency Distribution ---------------------------------------------------------
+vertical_ratio_frequency <- summary(dataset_survey_sector[, 34])
+print(vertical_ratio_frequency)
+
+# Saving ------------------------------------------------------------------------
+# vertical_ratio_frequency_df <- as.data.frame(t(vertical_ratio_frequency))
+# write.csv(vertical_ratio_frequency_df, "vertical_ratio_frequency.csv")
+```
+
+Verticals density plot  ---------------------------------------------------------
+
+```{r}
+# Density plot  -----------------------------------------------------------------
+dens <- density(dataset_survey_sector$X34)
+
+density_verticals <- ggplot() +
+  geom_line(data = data.frame(x = dens$x, y = dens$y), aes(x, y), color = "skyblue") +
+  geom_polygon(data = data.frame(x = dens$x, y = dens$y), aes(x, y), fill = "lightblue") +
+  labs(title = "", x = "Value", y = "Density") +
+  theme_minimal()
+print(density_verticals)
+
+# ggsave("density_verticals.pdf", plot = density_verticals)
+```
+
+
+## SECTOR AND VERTICALS KNOWLEDGE -----------------------------------------------
+
+
+```{r}
+
+#Frequency Table ----------------------------------------------------------------
+table_sector_verticals <- table(dataset_survey_sector$X3, dataset_survey_sector$X34)
+print(table_sector_verticals)
+
+# Saving ------------------------------------------------------------------------
+# table_sector_verticals_df <- as.data.frame(t(table_sector_verticals))
+# write.csv(table_sector_verticals_df, "table_sector_verticals.csv")
+```
+
+Conditionate mean ---------------------------------------------------------------
+
+```{r}
+
+media_condizionata <- aggregate(X34 ~ X3, data = dataset_survey_sector, FUN = mean)
+print(media_condizionata)
+media_condizionata <- media_condizionata %>% arrange(X34)
+media_condizionata$X3 <- factor(media_condizionata$X3, levels = media_condizionata$X3)
+```
+
+```{r}
+# Barplot
+Barplot_verticals_sector <- ggplot(media_condizionata, aes(x = X3, y = X34, fill = X3)) +
+  geom_bar(stat = "identity") +
+  scale_fill_viridis_d() +
+  labs(title = NULL, x = NULL, y = "Verticals Ratio", fill = "Legend") +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) 
+
+print(Barplot_verticals_sector)
+
+# ggsave("Barplot_verticals_sector.pdf", plot = Barplot_verticals_sector)
+
+```
+
+
+## HORIZONTALS KNOWLEDGE [X35]  -------------------------------------------------
+
+
+```{r}
+
+# HORIZONTALS RATIO
+
+# Total "Si" (Yes) response in columns 6 - 8, 13, 14
+total_si <- rowSums(dataset_survey_sector[, c(6, 7, 8, 13, 14)] == "Si", na.rm = TRUE)
+
+# Normalize values from 0 to 1
+min_val <- min(total_si)
+max_val <- max(total_si)
+normalized_val <- (total_si - min_val) / (max_val - min_val)
+
+# Add new column for Horizontal Ratio
+dataset_survey_sector$X35 <- normalized_val
+```
+
+```{r}
+#Frequency Distribution ---------------------------------------------------------
+horizontals_ratio_frequency <- summary(dataset_survey_sector[, 35])
+print(horizontals_ratio_frequency)
+
+# Saving ------------------------------------------------------------------------
+# horizontals_ratio_frequency_df <- as.data.frame(t(horizontals_ratio_frequency))
+# write.csv(horizontals_ratio_frequency_df, "horizontals_ratio_frequency.csv")
+```
+
+Verticals density plot  ---------------------------------------------------------
+
+```{r}
+# Density plot  -----------------------------------------------------------------
+dens <- density(dataset_survey_sector$X35)
+
+density_horizontals <- ggplot() +
+  geom_line(data = data.frame(x = dens$x, y = dens$y), aes(x, y), color = "skyblue") +
+  geom_polygon(data = data.frame(x = dens$x, y = dens$y), aes(x, y), fill = "lightblue") +
+  labs(title = "", x = "Value", y = "Density") +
+  theme_minimal()
+print(density_horizontals)
+
+# ggsave("density_horizontals.pdf", plot = density_horizontals)
+```
+
+
+## SECTOR AND HORIZONTALS KNOWLEDGE  ----------------------------------------------
+
+```{r}
+
+#Frequency Table ----------------------------------------------------------------
+table_sector_horizontals <- table(dataset_survey_sector$X3, dataset_survey_sector$X35)
+print(table_sector_horizontals)
+
+# Saving ------------------------------------------------------------------------
+# table_sector_horizontals_df <- as.data.frame(t(table_sector_horizontals))
+# write.csv(table_sector_horizontals_df, "table_sector_horizontals.csv")
+```
+
+Conditionate mean ---------------------------------------------------------------
+
+```{r}
+
+media_condizionata <- aggregate(X35 ~ X3, data = dataset_survey_sector, FUN = mean)
+print(media_condizionata)
+media_condizionata <- media_condizionata %>% arrange(X35)
+media_condizionata$X3 <- factor(media_condizionata$X3, levels = media_condizionata$X3)
+```
+
+
+```{r}
+# Barplot
+Barplot_horizontals_sector <- ggplot(media_condizionata, aes(x = X3, y = X35, fill = X3)) +
+  geom_bar(stat = "identity") +
+  scale_fill_viridis_d() +
+  labs(title = NULL, x = NULL, y = "Verticals Ratio", fill = "Legend") +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) 
+
+print(Barplot_horizontals_sector)
+
+# ggsave("Barplot_horizontals_sector.pdf", plot = Barplot_horizontals_sector)
+
+```
+
+
+

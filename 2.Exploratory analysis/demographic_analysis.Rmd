@@ -1,0 +1,821 @@
+---
+title: "PMEs Fintech&Sustainability in Triveneto Area"
+subtitle: "Demographic of respondents"
+author: "Elisa Nardini"
+date: "2024-02-02"
+output: pdf_document
+---
+
+## Dataset and package reading
+
+```{r setup, include=FALSE}
+rm(list = ls())
+
+# Set Wd ------------------------------------------------------------------------
+setwd("~/Desktop/R/fintechsustainabilty")
+df <- read.csv("dataset_demograph.csv")
+
+# Packages ----------------------------------------------------------------------
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+
+# Import Data -------------------------------------------------------------------
+dataset_survey_demograph <- read.csv("dataset_demograph.csv")
+#dataset_survey_demograph <- dataset_survey_demograph[, -c(1)]
+```
+
+Font settings
+
+```{r}
+
+# Packages ----------------------------------------------------------------------
+library(extrafont)
+
+# Import Font -------------------------------------------------------------------
+font_import(pattern = "Arial")
+loadfonts()
+
+# Set Font ----------------------------------------------------------------------
+par(family = "Arial") 
+theme_set(theme_grey(base_family = "Arial"))
+```
+y
+
+## EMPLOYEE EXPERTISE IN THE FIRM [X1]  --------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+#Expertise Stats ----------------------------------------------------------------
+expertise_stats <- summary(dataset_survey_demograph[, 1])
+print(expertise_stats)
+
+# Saving ------------------------------------------------------------------------
+# expertise_stats_df <- as.data.frame(t(expertise_stats))
+# write.csv(expertise_stats_df, "expertise_stats.csv")
+```
+
+
+```{r, global=TRUE}
+
+#Expertise Class Stats ----------------------------------------------------------
+expertise_class_stats <- table(dataset_survey_demograph$X34)
+print(expertise_class_stats)
+
+
+# Total Percentage --------------------------------------------------------------
+percent_expertise_class_stats <- prop.table(expertise_class_stats) * 100
+
+# Combined
+class_frequency_table <- data.frame(
+  Frequency = expertise_class_stats,
+  Percentage = percent_expertise_class_stats
+)
+print(class_frequency_table)
+
+# Saving ------------------------------------------------------------------------
+class_frequency_table_df <- as.data.frame(t(class_frequency_table))
+write.csv(class_frequency_table_df, "class_frequency_table.csv")
+
+```
+
+Barplot Class Expertise
+
+```{r}
+
+# Increasing Order --------------------------------------------------------------
+reorder_size <- function(x) {
+        factor(x, levels = names(sort(table(x), increasing = TRUE)))
+}
+
+labels <- c("12%", "48%", "40%")
+
+# Bar plot Class Expertise ------------------------------------------------------
+
+Barplot_class_expertise <- ggplot(dataset_survey_demograph, aes(x =reorder_size(X34), fill = X34)) +
+  geom_bar() +
+  labs(title = NULL, x = "Expertise", y = "Frequency", fill = NULL) +
+  theme(legend.position = "top") +
+  scale_fill_manual(values = c("salmon", "darkolivegreen3", "darkturquoise"), labels = labels)
+  #scale_x_discrete(labels = labels) 
+
+print(Barplot_class_expertise)
+
+ggsave(file.path("plot", "1.Barplot_class_expertise.pdf"), plot = Barplot_class_expertise)
+```
+
+
+
+## EMPLOYEE ROLE IN THE FIRM [X2]  -------------------------------------------------------------------------------------------------------------
+
+
+```{r}
+# Space Remove  -----------------------------------------------------------------
+dataset_survey_demograph$X2 <- trimws(dataset_survey_demograph$X2, "both")
+
+#Expertise Stats ----------------------------------------------------------------
+role_freq <- table(dataset_survey_demograph[, 2])
+print(role_freq)
+
+# Saving ------------------------------------------------------------------------
+# role_freq_df <- as.data.frame(t(role_freq))
+# write.csv(role_freq_df, "role_freq.csv")
+```
+
+Barplot per Role
+
+```{r}
+# Decreasing Order --------------------------------------------------------------
+reorder_size <- function(x) {
+        factor(x, levels = names(sort(table(x), decreasing = TRUE)))
+}
+
+labels <- c("38%", "4%", "27%", "31%")
+
+# Bar plot Role -----------------------------------------------------------------
+BarPlot_role <- ggplot(dataset_survey_demograph, aes(x =reorder_size(X2), fill = X2)) +
+  geom_bar() +
+  labs(title = NULL, x = "Role", y = "Frequency", fill = NULL) +
+    theme(axis.text.x = element_blank(),
+        legend.position = "top", 
+        text = element_text(size = 10)) +
+    scale_fill_manual(values = c("salmon", "darkorchid1", "darkturquoise","darkolivegreen3"))+
+    scale_x_discrete(labels = labels) 
+
+
+print(BarPlot_role)
+ggsave(file.path("plot", "2.BarPlot_role.pdf"), plot = BarPlot_role)
+```
+
+```{r}
+
+#Role Stats ---------------------------------------------------------------------
+role_stats <- table(dataset_survey_demograph[, 2])
+
+# Total Percentage --------------------------------------------------------------
+percent_role_stats <- prop.table(role_stats) * 100
+
+role_frequency_table <- data.frame(
+  Percentage = percent_role_stats
+)
+print(role_frequency_table)
+```
+
+
+```{r}
+# Pie Chart 
+PieChart_role <- ggplot(dataset_survey_demograph, aes(x = "", fill = X2)) +
+  geom_bar(width = 1, color = "white", position = "fill") +
+  coord_polar("y", start = 0) +
+  labs(title = NULL, fill = NULL) +
+  coord_polar(theta = "y") +
+  theme_void() +
+  theme(legend.position = "left", text = element_text(size = 14))
+  
+
+print(PieChart_role)
+ggsave(file.path("plot", "2.PieChart_role.pdf"), plot = BarPlot_role)
+```
+
+
+## EMPLOYEE EXPERTISE IN THE SECTOR [X4]  --------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+
+#Expertise Stats ----------------------------------------------------------------
+expertise_stats <- summary(dataset_survey_demograph[, 4])
+print(expertise_stats)
+
+# Saving ------------------------------------------------------------------------
+# expertise_stats_df <- as.data.frame(t(expertise_stats))
+# write.csv(expertise_stats_df, "expertise_stats.csv")
+```
+
+
+```{r, global=TRUE}
+
+#Expertise Class Stats ----------------------------------------------------------
+expertise_class_stats <- table(dataset_survey_demograph$X35)
+print(expertise_class_stats)
+
+
+# Total Percentage --------------------------------------------------------------
+percent_expertise_class_stats <- prop.table(expertise_class_stats) * 100
+
+# Combined
+class_frequency_table <- data.frame(
+  Frequency = expertise_class_stats,
+  Percentage = percent_expertise_class_stats
+)
+print(class_frequency_table)
+
+
+# Saving ------------------------------------------------------------------------
+# class_frequency_table_df <- as.data.frame(t(class_frequency_table))
+# write.csv(class_frequency_table_df, "class_frequency_table.csv")
+
+```
+
+
+Barplot Class Expertise in Sector
+
+```{r}
+
+# Increasing Order --------------------------------------------------------------
+reorder_size <- function(x) {
+        factor(x, levels = names(sort(table(x), increasing = TRUE)))
+}
+
+labels <- c("14%", "55%", "31%")
+
+# Barplot
+Barplot_class_expertise_sector <- ggplot(dataset_survey_demograph, aes(x = reorder_size(X35), fill = X35)) +
+  geom_bar() +
+  labs(title = NULL, x = "Expertise", y = "Frequency", fill = NULL) +
+  theme(legend.position = "top") +
+  scale_fill_manual(values = c("salmon", "darkolivegreen3", "darkturquoise"), labels = labels)
+
+print(Barplot_class_expertise_sector)
+ggsave(file.path("plot", "3.Barplot_class_expertise_sector.pdf"), plot = Barplot_class_expertise_sector)
+
+```
+
+## EMPLOYEE EXPERTISE + EXPERTISE IN THE SECTOR [X1; X4]  -------------------------------------------------------------------------
+
+```{r}
+# Increasing Order --------------------------------------------------------------
+reorder_size <- function(x) {
+        factor(x, levels = names(sort(table(x), increasing = FALSE)))
+}
+
+# Counts
+counts <- dataset_survey_demograph[, 34:35] %>%
+  gather(key = "colonna", value = "classe") %>%
+  count(colonna, classe)
+
+print(counts)
+
+```
+
+```{r}
+# Bar Plot ----------------------------------------------------------------------
+counts <- counts[order(counts_df$n), ]
+counts$classe_ord <- factor(counts$classe, levels = c("<2", "2-10", ">10"))
+
+# Bar Plot Expertise FIRM/SECTOR
+BarPlot_firm_sector <- ggplot(counts, aes(x = classe_ord, y = n, fill = colonna)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  labs(title = NULL,
+       x = "Expertise",
+       y = "Years",
+       fill = NULL) +
+  theme(legend.position = "top") +
+  scale_fill_manual(values = c("salmon", "darkturquoise"), labels = labels)
+
+print(BarPlot_firm_sector)
+
+
+ggsave(file.path("plot", "4.BarPlot_firm_sector.pdf"), plot = BarPlot_firm_sector)
+
+```
+
+
+
+## EMPLOYEE EXPERTISE + ROLE [X34; X2]  --------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+table_Expertise_Role <- table(dataset_survey_demograph$X2, dataset_survey_demograph$X35)
+print(table_Expertise_Role)
+```
+
+
+```{r}
+Expertise_Role_df <- as.data.frame(table_Expertise_Role)
+print(Expertise_Role_df)
+```
+
+
+```{r}
+
+# Bar Plot
+BarPlot_role_expertise <- ggplot(Expertise_Role_df, aes(x = Var1, y = Freq, fill = Var2)) +
+  geom_bar(position="dodge2", stat="identity") +
+  labs(title = NULL,
+       x = "Area",
+       y = "Experience distribution",
+       fill = NULL) +
+  theme(legend.position = "top") +
+  scale_fill_manual(values = c("salmon", "darkturquoise","darkolivegreen3")) +
+  theme(text = element_text(size = 10))
+
+
+print(BarPlot_role_expertise)
+ggsave(file.path("plot", "5.BarPlot_role_expertise.pdf"), plot = BarPlot_role_expertise)
+
+```
+```{r}
+
+# Bar Plot
+BarPlot_expertise_role <- ggplot(Expertise_Role_df, aes(x = Var2, y = Freq, fill = Var1)) +
+  geom_bar(position="dodge2", stat="identity") +
+  labs(title = NULL,
+       x = "Experience",
+       y = "Experience distribution",
+       fill = NULL) +
+  theme(legend.position = "top") +
+  scale_fill_manual(values = c("salmon", "darkorchid1", "darkturquoise","darkolivegreen3")) +
+  theme(text = element_text(size = 10))
+
+
+print(BarPlot_expertise_role)
+ggsave(file.path("plot", "5.BarPlot_expertise_role.pdf"), plot = BarPlot_expertise_role)
+
+```
+
+
+## FINTECH KNOWLEDGE [X5]  ---------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+
+#Expertise Stats ----------------------------------------------------------------
+fintech_knowledge_stats <- table(dataset_survey_demograph[, 5])
+print(fintech_knowledge_stats)
+
+# Saving ------------------------------------------------------------------------
+# fintech_knowledge_stats_df <- as.data.frame(t(fintech_knowledge_stats))
+# write.csv(fintech_knowledge_stats_df, "fintech_knowledge_stats.csv")
+```
+
+BarPlot Fintech Knowledge
+
+```{r}
+
+BarPlot_fintech_knowledge <- ggplot(dataset_survey_demograph, aes(x = X5)) +
+  geom_bar(fill = "skyblue") +
+  labs(x = "Values", y = "Frequency") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+print(BarPlot_fintech_knowledge)
+#ggsave(file.path("plot", "6.BarPlot_fintech_knowledge.pdf"), plot = BarPlot_fintech_knowledge)
+
+```
+
+
+```{r}
+# Density
+dens <- density(dataset_survey_demograph$X5)
+
+Densità_fintech_knowledge <- ggplot() +
+  geom_line(data = data.frame(x = dens$x, y = dens$y), aes(x, y), color = "skyblue") +
+  geom_polygon(data = data.frame(x = dens$x, y = dens$y), aes(x, y), fill = "skyblue") +
+  labs(title = "", x = "Value", y = "Frequency") +
+  theme(axis.ticks.x = element_blank())+
+  theme(text = element_text(size = 10))
+
+  
+print(Densità_fintech_knowledge)
+ggsave(file.path("plot", "6.Densità_fintech_knowledge.pdf"), plot = Densità_fintech_knowledge)
+
+```
+
+
+## FINTECH KNOWLEDGE AND ROLE [X5; X2]  --------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+#Fintech Knowledge per Role Stats ----------------------------------------------------------------
+tabele_FK_Role <- table(dataset_survey_demograph$X2, dataset_survey_demograph$X5)
+print(tabele_FK_Role)
+
+# Saving ------------------------------------------------------------------------
+# tabele_FK_Role_df <- as.data.frame(t(tabele_FK_Role))
+# write.csv(tabele_FK_Role_df, "tabele_FK_Role.csv")
+```
+
+```{r}
+media_condizionata <- aggregate(X5 ~ X2, data = dataset_survey_demograph, FUN = mean)
+media_condizionata <- media_condizionata %>% arrange(X5)
+media_condizionata$X2 <- factor(media_condizionata$X2, levels = media_condizionata$X2)
+print(media_condizionata)
+```
+
+Fintech Knowledge per role Bar Plot  --------------------------------------------
+
+```{r}
+# Barplot Fintech Knowledge per role   ------------------------------------------
+Barplot_FK_per_role <- ggplot(media_condizionata, aes(x = X2, y = X5, fill = X2)) +
+  geom_bar(stat = "identity", width = 0.8) +
+  scale_fill_viridis_d() +
+  labs(title = NULL, x = "Area", y = "Mean Fintech Knowledge", fill = NULL) +
+  theme(axis.text.x = element_blank())+
+  theme(legend.position = "top", text = element_text(size = 10)) +
+  scale_y_continuous(breaks = seq(0, 7, by = 1), limits = c(0, 7))  
+
+print(Barplot_FK_per_role)
+
+ggsave("Barplot_FK_per_role.pdf", plot = Barplot_FK_per_role)
+ggsave(file.path("plot", "7.Barplot_FK_per_role.pdf"), plot = Barplot_FK_per_role)
+```
+
+Adding Weights ------------------------------------------------------------------
+
+```{r}
+
+media_condizionata <- aggregate(X5 ~ X2, data = dataset_survey_demograph, FUN = mean)
+media_condizionata <- media_condizionata %>% arrange(X5)
+
+
+total_freq <- sum(table(dataset_survey_demograph$X2))
+
+media_condizionata <- media_condizionata %>%
+  mutate(Peso = table(dataset_survey_demograph$X2)[as.character(X2)] / total_freq)
+
+media_condizionata <- media_condizionata %>%
+  mutate(Media_Pesata = X5 * Peso)
+
+media_condizionata$X2 <- factor(media_condizionata$X2, levels = media_condizionata$X2)
+
+print(media_condizionata)
+
+```
+
+```{r}
+# Barplot Fintech Knowledge per role   ------------------------------------------
+
+Barplot_FK_per_role_weight <- ggplot(media_condizionata, aes(x = X2, y = Media_Pesata, fill = X2)) +
+  geom_bar(stat = "identity", width = 0.8) +
+  scale_fill_viridis_d() +
+  labs(title = NULL, x = "Area", y = "Mean Fintech Knowledge", fill = "Legend") +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())+
+  theme(legend.position = "top", text = element_text(size = 10)) +
+  scale_y_continuous(breaks = seq(0, 3, by = 1), limits = c(0, 3))  
+
+print(Barplot_FK_per_role_weight)
+
+
+ggsave(file.path("plot", "7.Barplot_FK_per_role_weight.pdf"), plot = Barplot_FK_per_role_weight)
+
+```
+
+## HORIZONTALS KNOWLEDGE AND ROLE [HORIZONTALS; X2]  --------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+
+# HORIZONTALS RATIO
+
+# Total "Si" (Yes) response in columns 6 - 8, 13, 14
+total_si <- rowSums(dataset_survey_demograph[, c(6, 7, 8, 13, 14)] == "Si", na.rm = TRUE)
+
+# Normalize values from 0 to 1
+min_val <- min(total_si)
+max_val <- max(total_si)
+normalized_val <- (total_si - min_val) / (max_val - min_val)
+
+# Add new column for Horizontal Ratio
+dataset_survey_demograph$horizontals <- normalized_val
+```
+
+```{r}
+tabele_FK_Role <- table(dataset_survey_demograph$X2, dataset_survey_demograph$horizontals)
+print(tabele_FK_Role)
+```
+
+```{r}
+media_condizionata <- aggregate(horizontals ~ X2, data = dataset_survey_demograph, FUN = mean)
+print(media_condizionata)
+media_condizionata <- media_condizionata %>% arrange(horizontals)
+media_condizionata$X2 <- factor(media_condizionata$X2, levels = media_condizionata$X2)
+```
+
+```{r}
+# Barplot
+Barplot_horizontals_per_role <- ggplot(media_condizionata, aes(x = X2, y = horizontals, fill = X2)) +
+  geom_bar(stat = "identity") +
+  scale_fill_viridis_d() +
+  labs(title = NULL, x = "Area", y = "Mean Fintech Knowledge Horizontals", fill = NULL) +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())+
+  theme(legend.position = "top", text = element_text(size = 10))
+
+print(Barplot_horizontals_per_role)
+
+ggsave(file.path("plot", "8.Barplot_horizontals_per_role.pdf"), plot = Barplot_horizontals_per_role)
+
+```
+
+## VERTICALS KNOWLEDGE AND ROLE [VERTICALS; X2]  --------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+
+# VERTICALS RATIO
+
+# Total "Si" (Yes) response in columns 9 - 12
+total_si <- rowSums(dataset_survey_demograph[, 9:12] == "Si", na.rm = TRUE)
+
+# Normalize values from 0 to 1
+min_val <- min(total_si)
+max_val <- max(total_si)
+normalized_val <- (total_si - min_val) / (max_val - min_val)
+
+# Add new column for Horizontal Ratio
+dataset_survey_demograph$verticals <- normalized_val
+```
+
+```{r}
+
+tabele_FK_expertise <- table(dataset_survey_demograph$X2, dataset_survey_demograph$verticals)
+print(tabele_FK_expertise)
+```
+
+```{r}
+media_condizionata <- aggregate(verticals ~ X2, data = dataset_survey_demograph, FUN = mean)
+print(media_condizionata)
+media_condizionata <- media_condizionata %>% arrange(verticals)
+media_condizionata$X2 <- factor(media_condizionata$X2, levels = media_condizionata$X2)
+```
+
+```{r}
+# Barplot
+Barplot_verticals_per_role <- ggplot(media_condizionata, aes(x = X2, y = verticals, fill = X2)) +
+  geom_bar(stat = "identity") +
+  scale_fill_viridis_d() +
+  labs(title = NULL, x = "Area", y = "Mean Fintech Verticals Knowledge", fill = NULL) +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())+ 
+  theme(legend.position = "top", text = element_text(size = 10))
+print(Barplot_verticals_per_role)
+
+
+ggsave(file.path("plot", "9.Barplot_verticals_per_role.pdf"), plot = Barplot_verticals_per_role)
+
+```
+
+
+## FINTECH KNOWLEDGE AND SECTOR [X5; X3]  --------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+# Space Remove  -----------------------------------------------------------------
+dataset_survey_demograph$X2 <- trimws(dataset_survey_demograph$X2, "both")
+
+# Frequency Table  --------------------------------------------------------------
+tabele_FK_sector <- table(dataset_survey_demograph$X3, dataset_survey_demograph$X5)
+print(tabele_FK_sector)
+```
+
+```{r}
+media_condizionata <- aggregate(X5 ~ X3, data = dataset_survey_demograph, FUN = mean)
+print(media_condizionata)
+media_condizionata <- media_condizionata %>% arrange(X5)
+media_condizionata$X3 <- factor(media_condizionata$X3, levels = media_condizionata$X3)
+```
+
+```{r}
+# Pie Chart FK per Sector
+
+Piechart_FK_per_sector <- ggplot(media_condizionata, aes(x = "", y = X5, fill = X3)) +
+  geom_bar(stat = "identity") +
+  coord_polar("y", start = 0) +
+  scale_fill_viridis_d() +
+  labs(title = NULL, x = NULL, y = NULL, fill = NULL) +
+  theme_void() +
+  theme(legend.position = "left", text = element_text(size = 10))
+
+print(Piechart_FK_per_sector)
+
+ggsave(file.path("plot", "10.Piechart_FK_per_sector.pdf"), plot = Piechart_FK_per_sector)
+
+
+
+```
+
+
+## FINTECH KNOWLEDGE AND EXPERTISE IN THE SECTOR [X5; X35] ---------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+tabele_FK_sector_expertise <- table(dataset_survey_demograph$X34, dataset_survey_demograph$X5)
+print(tabele_FK_sector_expertise)
+```
+
+```{r}
+media_condizionata <- aggregate(X5 ~ X34, data = dataset_survey_demograph, FUN = mean)
+print(media_condizionata)
+media_condizionata <- media_condizionata %>% arrange(X5)
+media_condizionata$X34 <- factor(media_condizionata$X34, levels = media_condizionata$X34)
+```
+
+```{r}
+# Barplot FK and Expertise in Firm
+
+Barplot_FK_per_sector_expertise<- ggplot(media_condizionata, aes(x = X34, y = X5, fill = X34)) +
+  geom_bar(stat = "identity") +
+  scale_fill_viridis_d() +
+  labs(title = NULL, x = NULL, y = "Mean Fintech Knowledge", fill = NULL) +
+  theme(axis.text.x = element_blank())+
+  theme(legend.position = "top", text = element_text(size = 12))
+  scale_y_continuous(breaks = seq(0, 7, by = 1), limits = c(0, 7)) 
+
+
+print(Barplot_FK_per_sector_expertise)
+
+ggsave(file.path("plot", "11.Barplot_FK_per_sector_expertise.pdf"), plot = Barplot_FK_per_sector_expertise)
+```
+
+
+## BLOCKCHAIN KNOWLEDGE [X6]  --------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+tabele_blockchain <- table(dataset_survey_demograph[ ,6])
+print(tabele_blockchain)
+```
+
+```{r}
+# BarPlot
+BarPlot_blockchain <- ggplot(dataset_survey_demograph, aes(x = X6)) +
+  geom_bar(fill = "skyblue") +
+  labs(x = "Valori", y = "Frequenza") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(BarPlot_blockchain)
+# ggsave("BarPlot_blockchain.pdf", plot = BarPlot_blockchain)
+```
+
+
+
+## AI KNOWLEDGE [X7] -----------------------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+tabele_ai <- table(dataset_survey_demograph[ ,7])
+print(tabele_ai)
+```
+
+```{r}
+# BarPlot
+BarPlot_ai <- ggplot(dataset_survey_demograph, aes(x = X7)) +
+  geom_bar(fill = "skyblue") +
+  labs(x = "Valori", y = "Frequenza") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(BarPlot_ai)
+# ggsave("BarPlot_ai.pdf", plot = BarPlot_ai)
+
+```
+
+
+## ML KNOWLEDGE [X8]  ] -----------------------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+tabele_ml <- table(dataset_survey_demograph[ ,8])
+print(tabele_ml)
+```
+
+```{r}
+# BarPlot
+BarPlot_ml <- ggplot(dataset_survey_demograph, aes(x = X8)) +
+  geom_bar(fill = "skyblue") +
+  labs(x = "Valori", y = "Frequenza") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(BarPlot_ml)
+# ggsave("BarPlot_ml.pdf", plot = BarPlot_ml)
+
+```
+
+## Crowfunding KNOWLEDGE [X9] -----------------------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+tabele_crowfunding <- table(dataset_survey_demograph[ ,9])
+print(tabele_crowfunding)
+```
+
+```{r}
+# BarPlot
+BarPlot_crowfunding <- ggplot(dataset_survey_demograph, aes(x = X9)) +
+  geom_bar(fill = "skyblue") +
+  labs(x = "Valori", y = "Frequenza") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(BarPlot_ml)
+# ggsave("BarPlot_crowfunding.pdf", plot = BarPlot_crowfunding)
+
+```
+
+## Peer to Peer KNOWLEDGE [X10]  -----------------------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+tabele_p2p <- table(dataset_survey_demograph[ ,10])
+print(tabele_p2p)
+```
+
+```{r}
+# BarPlot
+BarPlot_p2p <- ggplot(dataset_survey_demograph, aes(x = X9)) +
+  geom_bar(fill = "skyblue") +
+  labs(x = "Valori", y = "Frequenza") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(BarPlot_p2p)
+# ggsave("BarPlot_p2p.pdf", plot = BarPlot_p2p)
+```
+
+## Mobile Payment KNOWLEDGE [X11]  ------------------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+tabele_mobilepay <- table(dataset_survey_demograph[ ,11])
+print(tabele_mobilepay)
+```
+
+```{r}
+# BarPlot
+BarPlot_mobilepay <- ggplot(dataset_survey_demograph, aes(x = X11)) +
+  geom_bar(fill = "skyblue") +
+  labs(x = "Valori", y = "Frequenza") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(BarPlot_mobilepay)
+# ggsave("BarPlot_mobilepay.pdf", plot = BarPlot_mobilepay)
+```
+
+## NFT KNOWLEDGE [X12]  ------------------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+tabele_nft <- table(dataset_survey_demograph[ ,12])
+print(tabele_nft)
+```
+
+```{r}
+# BarPlot
+BarPlot_nft <- ggplot(dataset_survey_demograph, aes(x = X12)) +
+  geom_bar(fill = "skyblue") +
+  labs(x = "Valori", y = "Frequenza") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(BarPlot_nft)
+# ggsave("BarPlot_nft.pdf", plot = BarPlot_nft)
+```
+
+
+## Chatbot KNOWLEDGE [X13]  -------------------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+tabele_chatbot <- table(dataset_survey_demograph[ ,13])
+print(tabele_chatbot)
+```
+
+```{r}
+# BarPlot
+BarPlot_chatbot <- ggplot(dataset_survey_demograph, aes(x = X13)) +
+  geom_bar(fill = "skyblue") +
+  labs(x = "Valori", y = "Frequenza") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(BarPlot_chatbot)
+# ggsave("BarPlot_chatbot.pdf", plot = BarPlot_chatbot)
+```
+
+
+## Robotic Process Automation [X14]  -----------------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+tabele_chatbot <- table(dataset_survey_demograph[ ,14])
+print(tabele_chatbot)
+```
+
+```{r}
+# BarPlot
+BarPlot_rba <- ggplot(dataset_survey_demograph, aes(x = X14)) +
+  geom_bar(fill = "skyblue") +
+  labs(x = "Valori", y = "Frequenza") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(BarPlot_rba)
+# ggsave("BarPlot_rba.pdf", plot = BarPlot_rba)
+```
+
+
+## FINTECH OVERALL KNOWLEDGE [X6, X14]  -----------------------------------------------------------------------------------------------------------------------------------------
+
+```{r}
+
+# Counts
+counts <- dataset_survey_demograph[, 6:14] %>%
+  gather(key = "colonna", value = "risposta") %>%
+  count(colonna, risposta)
+
+counts$colonna <- factor(counts$colonna, levels = colnames(dataset_survey_demograph)[6:14])
+
+labels <- c("Blockchain", "AI", "ML", "Crowfunding", "P2P", "Mobile payment ","NFT", "Chatbot", "RBA")
+
+# Bar Plot
+BarPlot_count <- ggplot(counts, aes(x = colonna, y = n, fill = risposta)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(title = NULL,
+       x = "Fintech Instrument",
+       y = "Count", fill = NULL) +
+  theme_minimal()+
+  theme(legend.position = "top", text = element_text(size = 12))+
+  scale_x_discrete(labels = labels) 
+
+
+print(BarPlot_count)
+ggsave("BarPlot_count.pdf", plot = BarPlot_count)
+```
