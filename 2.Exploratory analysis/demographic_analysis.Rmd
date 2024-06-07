@@ -13,7 +13,7 @@ rm(list = ls())
 
 # Set Wd ------------------------------------------------------------------------
 setwd("~/Desktop/R/fintechsustainabilty")
-df <- read.csv("dataset_demograph.csv")
+df <- read.csv("dataset_en.csv")
 
 # Packages ----------------------------------------------------------------------
 library(ggplot2)
@@ -21,7 +21,7 @@ library(plotly)
 library(tidyverse)
 
 # Import Data -------------------------------------------------------------------
-dataset_survey_demograph <- read.csv("dataset_demograph.csv")
+dataset_survey_demograph <- read.csv("dataset_en.csv")
 #dataset_survey_demograph <- dataset_survey_demograph[, -c(1)]
 ```
 
