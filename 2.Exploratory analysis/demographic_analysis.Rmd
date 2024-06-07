@@ -1,5 +1,5 @@
 ---
-title: "PMEs Fintech&Sustainability in Triveneto Area"
+title: "SMEs Fintech&Sustainability in Triveneto Area"
 subtitle: "Demographic of respondents"
 author: "Elisa Nardini"
 date: "2024-02-02"
