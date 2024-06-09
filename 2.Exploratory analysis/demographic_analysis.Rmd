@@ -40,7 +40,7 @@ loadfonts()
 par(family = "Arial") 
 theme_set(theme_grey(base_family = "Arial"))
 ```
-y
+
 
 ## EMPLOYEE EXPERTISE IN THE FIRM [X1]  --------------------------------------------------------------------------------------------------------------------------------
 
